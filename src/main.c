@@ -3,6 +3,6 @@
 
 int main(void){
 
-    printf("=== Bienvenue sur MiniShell ===\n");
+    printf("=== Welcome to MiniShell ===\n");
 
 }
