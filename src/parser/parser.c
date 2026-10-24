@@ -1,43 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
+#include "parser.h"
+#include "parser_internal.h"
 
-    char * data;
-    int * next;
+struct Node {
 
-} Node;
+  char *data;
+  int *next;
+};
 
-int buffer_allocation(void){
+char *buffer_allocation(void) {
 
-    char *buffer = malloc(64);
-    if (buffer != NULL){
-        printf("Buffer allocation OK\n");
-        printf("%p\n", &buffer);
-    }
+  char *buffer = malloc(64);
+  if (buffer != NULL) {
+    printf("Buffer allocation OK\n");
+    printf("%p\n", &buffer);
+  }
 
-    printf(">>> ");
-    fgets(buffer, 64, stdin);
-    printf("%s\n", buffer);
+  printf(">>> ");
+  fgets(buffer, 64, stdin);
+  printf("%s\n", buffer);
 
-    free(buffer);
-
+  free(buffer);
 }
 
-int add_link(){
+int add_link() {}
 
+int remove_link() {}
 
+Node *parser() {}
 
-}
+void parser_free() {}
 
-int remove_link(){
-
-
-
-}
-
-int main(void){
-
-    buffer_allocation();
-
-}
