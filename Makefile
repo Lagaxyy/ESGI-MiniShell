@@ -15,6 +15,10 @@ BIN_DIR = ${BUILD_DIR}/bin
 CPPFLAGS = -I${SRC_DIR}
 CFLAGS = -Wall
 
+# Fedora ne cherche pas criterion.pc dans /usr/local/lib/pkgconfig
+PKG_CONFIG_PATH := /usr/local/lib/pkgconfig:$(PKG_CONFIG_PATH)
+export PKG_CONFIG_PATH
+
 CRITERION_CFLAGS = $(shell pkg-config --cflags criterion 2>/dev/null)
 CRITERION_LIBS = $(shell pkg-config --libs criterion 2>/dev/null)
 
@@ -52,6 +56,9 @@ ${OBJ_DIR}/tests/unit/%.o: ${TEST_DIR}/unit/%.c
 
 ${UNIT_BIN}: ${UNIT_OBJS} ${LIB}
 	@mkdir -p $(dir $@)
+	@test -n "$(CRITERION_LIBS)" || { \
+		echo "Criterion introuvable: pkg-config --libs criterion est vide"; \
+		echo "Installe Criterion ou verifie PKG_CONFIG_PATH"; exit 1; }
 	${CC} $^ ${CRITERION_LIBS} -o $@
 
 run: ${NAME}
