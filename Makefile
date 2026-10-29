@@ -11,6 +11,7 @@ TEST_DIR = tests
 BUILD_DIR = build
 OBJ_DIR = ${BUILD_DIR}/obj
 BIN_DIR = ${BUILD_DIR}/bin
+VG_LOG_DIR = ${BUILD_DIR}/valgrind
 
 CPPFLAGS = -I${SRC_DIR}
 CFLAGS = -Wall
@@ -34,7 +35,7 @@ UNIT_CPPFLAGS = ${CPPFLAGS} -I${TEST_DIR}/unit ${CRITERION_CFLAGS}
 
 DEPS = ${OBJS:.o=.d} ${MAIN_OBJ:.o=.d} ${UNIT_OBJS:.o=.d}
 
-.PHONY: all check clean test run test-unit fclean re
+.PHONY: all check clean test run test-unit fclean re test-valgrind
 
 all: ${NAME}
 
@@ -70,6 +71,25 @@ test: test-unit
 
 test-unit: ${UNIT_BIN}
 	./${UNIT_BIN} ${UNIT_ARGS}
+
+test-valgrind: ${UNIT_BIN}
+	@command -v valgrind >/dev/null 2>&1 || { \
+		echo "Valgrind introuvable"; exit 1; }
+	@mkdir -p ${VG_LOG_DIR}
+	@rm -f ${VG_LOG_DIR}/*.log
+	valgrind \
+		--trace-children=yes \
+		--leak-check=full \
+		--show-leak-kinds=definite,indirect \
+		--track-origins=yes \
+		--log-file=${VG_LOG_DIR}/valgrind.%p.log \
+		./${UNIT_BIN} ${UNIT_ARGS}
+	@if grep -EH 'definitely lost: [1-9]|indirectly lost: [1-9]|ERROR SUMMARY: [1-9]' \
+		${VG_LOG_DIR}/*.log; then \
+		echo "Valgrind: erreurs détectées, voir ${VG_LOG_DIR}/" \
+		exit 1; \
+	fi
+	@echo "Valgrind: pas d'erreurs"
 
 clean:
 	${RM} ${BUILD_DIR}
