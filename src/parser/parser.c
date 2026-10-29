@@ -87,10 +87,12 @@ void Node_free(Node *n) {
   free(n);
 }
 
+int is_quote(char c) { return c == '\'' || c == '"'; }
+
 char *extract_token(char *buffer, int *cursor) {
   char c;
   char *token;
-  int doubleQuotes = 0;
+  int isQuote = 0;
   int s = *cursor;
   size_t i = 0;
   size_t capacity = 16;
@@ -100,13 +102,13 @@ char *extract_token(char *buffer, int *cursor) {
     return NULL;
   }
 
-  if (buffer[s] == '"') {
+  if (is_quote(buffer[s])) {
     s++;
-    doubleQuotes = 1;
+    isQuote = 1;
   }
 
   c = buffer[s + i];
-  while (c != '\0' && ((doubleQuotes) ? c != '"' : !isspace(c))) {
+  while (c != '\0' && ((isQuote) ? !is_quote(c) : !isspace(c))) {
     if (i + 1 >= capacity) {
       char *temp;
 
@@ -123,8 +125,8 @@ char *extract_token(char *buffer, int *cursor) {
     c = buffer[s + i];
   }
   token[i] = '\0';
-  if (doubleQuotes && c != '"') {
-    if (c == '"') {
+  if (isQuote) {
+    if (is_quote(c)) {
       i++;
     } else {
       free(token);
