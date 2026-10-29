@@ -160,6 +160,7 @@ Node *parser() {
     free(token);
   }
 
+  free(input);
   return n;
 }
 

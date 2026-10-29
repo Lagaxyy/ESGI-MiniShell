@@ -89,7 +89,6 @@ test-valgrind: ${UNIT_BIN}
 		echo "Valgrind: erreurs détectées, voir ${VG_LOG_DIR}/" \
 		exit 1; \
 	fi
-	@echo "Valgrind: pas d'erreurs"
 
 clean:
 	${RM} ${BUILD_DIR}
