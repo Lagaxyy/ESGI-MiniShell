@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -86,6 +87,88 @@ void Node_free(Node *n) {
   free(n);
 }
 
-Node *parser() {}
+char *extract_token(char *buffer, int *cursor) {
+  char c;
+  char *token;
+  int doubleQuotes = 0;
+  int s = *cursor;
+  size_t i = 0;
+  size_t capacity = 16;
 
-void parser_free() {}
+  if ((token = (char *)malloc(sizeof(char) * capacity)) == NULL) {
+    fprintf(stderr, "extract_token: erreur allocation token");
+    return NULL;
+  }
+
+  if (buffer[s] == '"') {
+    s++;
+    doubleQuotes = 1;
+  }
+
+  c = buffer[s + i];
+  while (c != '\0' && ((doubleQuotes) ? c != '"' : !isspace(c))) {
+    if (i + 1 >= capacity) {
+      char *temp;
+
+      capacity *= 2;
+      if ((temp = realloc(token, sizeof(char) * capacity)) == NULL) {
+        fprintf(stderr, "extract_token: erreur reallocation token");
+        free(token);
+        return NULL;
+      }
+      token = temp;
+    }
+
+    token[i++] = c;
+    c = buffer[s + i];
+  }
+  token[i] = '\0';
+  if (doubleQuotes && c != '"') {
+    if (c == '"') {
+      i++;
+    } else {
+      free(token);
+      return NULL;
+    }
+  }
+
+  *cursor = s + i;
+  return token;
+}
+
+Node *parser() {
+  char c;
+  Node *n = NULL;
+  int i = 0;
+
+  char *input = buffer_allocation();
+  if (!input)
+    return NULL;
+
+  while ((c = input[i]) != '\0') {
+    char *token;
+
+    if (isspace(c)) {
+      i++;
+      continue;
+    }
+
+    if ((token = extract_token(input, &i)) == NULL) {
+      break;
+    }
+    n = Node_add(n, token);
+    free(token);
+  }
+
+  return n;
+}
+
+void parser_free(Node **n) {
+  Node *node = *n;
+
+  if (!node)
+    return;
+
+  Node_free(node);
+  *n = NULL;
+}

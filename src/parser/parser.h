@@ -8,6 +8,6 @@ struct Node {
 typedef struct Node Node;
 
 Node *parser();
-void parser_free();
+void parser_free(Node **n);
 
 #endif /* PARSER_H */
