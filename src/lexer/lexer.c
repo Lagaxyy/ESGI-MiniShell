@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "parser.h"
-#include "parser_internal.h"
+#include "lexer.h"
+#include "lexer_internal.h"
 
 #define CHUNK 128
 
@@ -138,7 +138,7 @@ char *extract_token(char *buffer, int *cursor) {
   return token;
 }
 
-Node *parser() {
+Node *lexer() {
   char c;
   Node *n = NULL;
   int i = 0;
@@ -166,7 +166,7 @@ Node *parser() {
   return n;
 }
 
-void parser_free(Node **n) {
+void lexer_free(Node **n) {
   Node *node = *n;
 
   if (!node)

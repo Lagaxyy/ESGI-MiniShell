@@ -2,8 +2,8 @@
 #include <criterion/redirect.h>
 #include <stdio.h>
 
-#include "parser/parser.h"
-#include "parser/parser_internal.h"
+#include "lexer/lexer.h"
+#include "lexer/lexer_internal.h"
 
 void Node_print(Node *node) {
   Node *n;
@@ -141,10 +141,10 @@ Test(Node, string_null) {
   node = NULL;
 }
 
-Test(parser, basique) {
+Test(lexer, basique) {
   Node *n;
   FILE *f;
-  char *filename = "build/parser.basique.criterion.test";
+  char *filename = "build/lexer.basique.criterion.test";
   char *input = "mkdir -p /toto/foo";
   char *expected[] = {"mkdir", "-p", "/toto/foo"};
   int size = 3;
@@ -157,7 +157,7 @@ Test(parser, basique) {
 
   freopen(filename, "r", stdin);
 
-  Node *got = parser();
+  Node *got = lexer();
 
   Node_print(got);
   for (n = got; n; n = n->next) {
@@ -171,13 +171,13 @@ Test(parser, basique) {
 
   cr_expect_eq(i, count);
 
-  parser_free(&got);
+  lexer_free(&got);
 }
 
-Test(parser, double_quotes) {
+Test(lexer, double_quotes) {
   Node *n;
   FILE *f;
-  char *filename = "build/parser.double_quotes.criterion.test";
+  char *filename = "build/lexer.double_quotes.criterion.test";
   char *input = "mkdir -p \"/toto/Foo le fou\"";
   char *expected[] = {"mkdir", "-p", "/toto/Foo le fou"};
   int size = 3;
@@ -190,7 +190,7 @@ Test(parser, double_quotes) {
 
   freopen(filename, "r", stdin);
 
-  Node *got = parser();
+  Node *got = lexer();
 
   Node_print(got);
   for (n = got; n; n = n->next) {
@@ -204,13 +204,13 @@ Test(parser, double_quotes) {
 
   cr_expect_eq(i, count);
 
-  parser_free(&got);
+  lexer_free(&got);
 }
 
-Test(parser, double_quotes_empty) {
+Test(lexer, double_quotes_empty) {
   Node *n;
   FILE *f;
-  char *filename = "build/parser.double_quotes_empty.criterion.test";
+  char *filename = "build/lexer.double_quotes_empty.criterion.test";
   char *input = "mkdir -p \"\"";
   char *expected[] = {"mkdir", "-p", ""};
   int size = 3;
@@ -223,7 +223,7 @@ Test(parser, double_quotes_empty) {
 
   freopen(filename, "r", stdin);
 
-  Node *got = parser();
+  Node *got = lexer();
 
   Node_print(got);
   for (n = got; n; n = n->next) {
@@ -237,12 +237,12 @@ Test(parser, double_quotes_empty) {
 
   cr_expect_eq(i, count);
 
-  parser_free(&got);
+  lexer_free(&got);
 }
 
-Test(parser, no_command) {
+Test(lexer, no_command) {
   FILE *f;
-  char *filename = "build/parser.no_command.criterion.test";
+  char *filename = "build/lexer.no_command.criterion.test";
   char *input = "";
 
   cr_assert_not_null(f = fopen(filename, "w"));
@@ -252,9 +252,9 @@ Test(parser, no_command) {
 
   freopen(filename, "r", stdin);
 
-  Node *got = parser();
+  Node *got = lexer();
 
   cr_expect_null(got);
 
-  parser_free(&got);
+  lexer_free(&got);
 }

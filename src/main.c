@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "parser/parser.h"
+#include "lexer/lexer.h"
 
 int main(void) {
   Node *node, *n;
@@ -9,7 +9,7 @@ int main(void) {
 
   while (1) {
     printf("minish $");
-    node = parser();
+    node = lexer();
 
     i = 0;
 
@@ -23,7 +23,7 @@ int main(void) {
     putchar('\n');
     putchar('\n');
 
-    parser_free(&n);
+    lexer_free(&n);
   }
 
   return EXIT_SUCCESS;
