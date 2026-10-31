@@ -1,0 +1,6 @@
+docs
+
+# Contenu post-build
+build/
+minishell
+
