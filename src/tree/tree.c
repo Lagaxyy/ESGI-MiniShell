@@ -4,18 +4,10 @@
 
 #include "tree.h"
 
-struct branch {
-  char nom[64];
-  branch_type type;
-  branch *parent;
-  branch *next_sibling;
-  branch *first_child;
-};
-
 branch *branch_create(char *nom, branch_type type) {
   branch *p = malloc(sizeof(branch));
 
-  if (p == NULL) {
+  if (p == NULL || !nom || strlen(nom) == 0 || strlen(nom) >= 64) {
     return NULL;
   }
 
@@ -28,32 +20,46 @@ branch *branch_create(char *nom, branch_type type) {
   return p;
 }
 
-branch *branch_find_child(branch *parent, char *nom) {
-  for (branch *c = parent->first_child; c != NULL; c = c->next_sibling) {
-    if (strcmp(c->nom, nom) == 0) {
-      return c;
+branch *branch_find(branch *b, char *nom) {
+  if (!b) {
+    return NULL;
+  }
+
+  branch *c, *rec;
+
+  if (strcmp(b->nom, nom) == 0) {
+    return b;
+  }
+
+  for (c = b->first_child; c != NULL; c = c->next_sibling) {
+    if ((rec = branch_find(c, nom)) != NULL) {
+      return rec;
     }
   }
+
   return NULL;
 }
 
 int branch_add_child(branch *parent, branch *child) {
   if (parent->type != Lieu) {
-    return 0;
+    return EXIT_FAILURE;
   }
-  if (branch_find_child(parent, child->nom) != NULL) {
-    return 0;
-  }
-
-  child->parent = parent;
 
   if (parent->first_child == NULL) {
     parent->first_child = child;
   } else {
+    if (!strcmp(parent->first_child->nom, child->nom)) {
+      return EXIT_FAILURE;
+    }
+
     branch *dernier = parent->first_child;
     while (dernier->next_sibling != NULL) {
+      if (!strcmp(dernier->nom, child->nom)) {
+        return EXIT_FAILURE;
+      }
       dernier = dernier->next_sibling;
     }
+    child->parent = parent;
     dernier->next_sibling = child;
   }
   return EXIT_SUCCESS;
