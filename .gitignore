@@ -1,4 +1,5 @@
 docs
+compile_flags.txt
 
 # Contenu post-build
 build/

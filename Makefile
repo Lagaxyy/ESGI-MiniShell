@@ -35,7 +35,7 @@ UNIT_CPPFLAGS = ${CPPFLAGS} -I${TEST_DIR}/unit ${CRITERION_CFLAGS}
 
 DEPS = ${OBJS:.o=.d} ${MAIN_OBJ:.o=.d} ${UNIT_OBJS:.o=.d}
 
-.PHONY: all check clean test run test-unit fclean re test-valgrind
+.PHONY: all check clean test run test-unit fclean re test-valgrind debug
 
 all: ${NAME}
 
@@ -64,6 +64,11 @@ ${UNIT_BIN}: ${UNIT_OBJS} ${LIB}
 
 run: ${NAME}
 	./${NAME} ${ARGS}
+
+debug: CFLAGS += -g -fsanitize=address
+debug: ${MAIN_OBJ} ${LIB}
+	${CC} ${CFLAGS} $^ -o ${NAME}
+	./${NAME} --debug
 
 check: test
 
@@ -114,4 +119,3 @@ help:
 # @echo "  test-func  run functional tests"
 
 -include ${DEPS}
-
