@@ -41,7 +41,7 @@ branch *branch_find(branch *b, char *nom) {
 }
 
 int branch_add_child(branch *parent, branch *child) {
-  if (parent->type != Lieu) {
+  if (parent->type != Folder) {
     return EXIT_FAILURE;
   }
 

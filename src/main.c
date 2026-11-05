@@ -42,13 +42,13 @@ int main(int argc, char *argv[]) {
   if ((shell = (Shell *)malloc(sizeof(Shell))) == NULL) {
     return 1;
   }
-  if ((n1 = branch_create("n1", Lieu)) == NULL) {
+  if ((n1 = branch_create("n1", Folder)) == NULL) {
     return 1;
   }
-  if ((n2 = branch_create("n2", Lieu)) == NULL) {
+  if ((n2 = branch_create("n2", Folder)) == NULL) {
     return 1;
   }
-  if ((n3 = branch_create("n3", Objet)) == NULL) {
+  if ((n3 = branch_create("n3", File)) == NULL) {
     return 1;
   }
   branch_add_child(n1, n2);

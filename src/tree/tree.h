@@ -1,7 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 
-typedef enum { Lieu, Objet } branch_type;
+typedef enum { Folder, File } branch_type;
 
 typedef struct branch branch;
 struct branch {
