@@ -47,6 +47,7 @@ int branch_add_child(branch *parent, branch *child) {
 
   if (parent->first_child == NULL) {
     parent->first_child = child;
+    child->parent = parent;
   } else {
     if (!strcmp(parent->first_child->nom, child->nom)) {
       return EXIT_FAILURE;
