@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
   const Command *c;
   Node *tokens, *token;
   Shell *shell;
-  branch *n1, *n2, *n3;
+  branch *n1, *n2, *n3, *n4;
 
   exit_code = 0;
   is_debug = argc >= 2 && !strcmp(argv[1], "--debug");
@@ -51,8 +51,12 @@ int main(int argc, char *argv[]) {
   if ((n3 = branch_create("n3", File)) == NULL) {
     return 1;
   }
+    if ((n4 = branch_create("n4", File)) == NULL) {
+    return 1;
+  }
   branch_add_child(n1, n2);
   branch_add_child(n2, n3);
+  branch_add_child(n2, n4);
   shell->root = n1;
   shell->cwd = n2;
   shell->debug_mode = is_debug;
@@ -78,7 +82,18 @@ int main(int argc, char *argv[]) {
     }
 
     c = command_find(command);
-    return_code = c ? c->f(shell, 1, (char **)user_arg) : 127;
+
+    Node * command_name = tokens;
+    int arg_number=0;
+
+    while(command_name->next != NULL){
+      command_name = command_name->next;
+      arg_number++;
+    }
+    
+/*     printf("%d\n", arg_number);
+ */
+    return_code = c ? c->f(shell, arg_number, (char **)user_arg) : 127;
 
     if (return_code == 127) {
       printf("command not found: %s\n\n", command);
