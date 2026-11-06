@@ -8,7 +8,8 @@ static const Command commands[] = {
     {"pwd", "Affiche le chemin absolu du répertoire courant", minishell_pwd,
      "pwd"},
     {"help", "Montre la liste des commandes", command_help, "help"},
-    {NULL, NULL, NULL},
+    {"ls", "Affiche le contenu d'un répertoire", minishell_ls, "ls"},
+    {NULL, NULL, NULL, NULL}
 };
 
 const Command *command_find(const char *name) {

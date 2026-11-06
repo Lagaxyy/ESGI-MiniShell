@@ -62,13 +62,23 @@ int main(int argc, char *argv[]) {
     tokens = lexer();
     command = tokens->data;
 
+    char **user_arg = tokens->next ? (char **)tokens->next->data : NULL;
+    
+/*     if (user_arg && user_arg[0]) {
+      printf("arg : [%s]\n", (char *)user_arg);
+    }
+    else {
+      printf("no argument\n");
+    } */
+    
+
     if (quit_shell(tokens, &exit_code)) {
       lexer_free(&tokens);
       break;
     }
 
     c = command_find(command);
-    return_code = c ? c->f(shell, 0, NULL) : 127;
+    return_code = c ? c->f(shell, 1, (char **)user_arg) : 127;
 
     if (return_code == 127) {
       printf("command not found: %s\n\n", command);
