@@ -17,6 +17,7 @@ typedef struct Command {
   char *description;
   command_func f;
   char *usage;
+  char *args;
 } Command;
 
 const Command *command_find(const char *name);

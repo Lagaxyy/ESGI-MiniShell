@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
   branch_add_child(n2, n3);
   branch_add_child(n2, n4);
   shell->root = n1;
-  shell->cwd = n2;
+  shell->cwd = n1;
   shell->debug_mode = is_debug;
 
   while (1) {
@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
       command_name = command_name->next;
       arg_number++;
     }
-    
+
 /*     printf("%d\n", arg_number);
  */
     return_code = c ? c->f(shell, arg_number, (char **)user_arg) : 127;
