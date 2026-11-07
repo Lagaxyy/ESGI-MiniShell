@@ -3,14 +3,27 @@
 
 #include "commands.h"
 
+
 void print_children_ls(branch *b){
     branch * fs = b->first_child;
 
-    printf("%s", (char *)fs);
+    if(fs->type == Folder){
+        printf("\033[1;34m%s\033[0m", (char *)fs);
+    }
+    else if (fs->type == File){
+        printf("%s", (char *)fs);
+    }
+
     while(fs != NULL){
         fs = fs->next_sibling;
         if(fs != NULL){
-            printf("    %s", (char *)fs);
+
+            if(fs->type == Folder){
+                printf("    \033[1;34m%s\033[0m", (char *)fs);
+            }
+            else if (fs->type == File){
+                printf("    %s", (char *)fs);
+            }
         }
         else{
             break;
@@ -37,13 +50,23 @@ void print_children_ls_l(branch *b){
 
     fs = b->first_child;
 
-    printf("%s", (char *)fs);
+    if(fs->type == Folder){
+        printf("\033[1;34m%s\033[0m", (char *)fs);
+    }
+    else if (fs->type == File){
+        printf("%s", (char *)fs);
+    }
 
     while(fs != NULL){
         fs = fs->next_sibling;
 
         if(fs != NULL){
-            printf("    %s", (char *)fs);
+            if(fs->type == Folder){
+                printf("    \033[1;34m%s\033[0m", (char *)fs);
+            }
+            else if (fs->type == File){
+                printf("    %s", (char *)fs);
+            }
         }
     }
     
