@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 
   while (1) {
     printf("minish $");
-    tokens = lexer();
+    tokens = lexer(NULL);
     command = tokens->data;
 
     if (quit_shell(tokens, &exit_code)) {
