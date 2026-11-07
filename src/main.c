@@ -66,8 +66,7 @@ int main(int argc, char *argv[]) {
     tokens = lexer();
     command = tokens->data;
 
-    char **user_arg = tokens->next ? (char **)tokens->next->data : NULL;
-    
+   
 /*     if (user_arg && user_arg[0]) {
       printf("arg : [%s]\n", (char *)user_arg);
     }
@@ -84,16 +83,28 @@ int main(int argc, char *argv[]) {
     c = command_find(command);
 
     Node * command_name = tokens;
-    int arg_number=0;
 
-    while(command_name->next != NULL){
-      command_name = command_name->next;
-      arg_number++;
+    int arg_count = 0;
+    for (Node *n = tokens->next; n != NULL; n = n->next)
+        arg_count++;
+
+    char **args = NULL;
+    if (arg_count > 0) {
+        args = malloc((size_t)(arg_count + 1) * sizeof(*args));
+        if (args == NULL) {
+            lexer_free(&tokens);
+            continue;
+        }
+
+        int k = 0;
+        for (Node *n = tokens->next; n != NULL; n = n->next)
+            args[k++] = n->data;
+        args[arg_count] = NULL;
     }
 
 /*     printf("%d\n", arg_number);
  */
-    return_code = c ? c->f(shell, arg_number, (char **)user_arg) : 127;
+    return_code = c ? c->f(shell, arg_count, args) : 127;
 
     if (return_code == 127) {
       printf("command not found: %s\n\n", command);

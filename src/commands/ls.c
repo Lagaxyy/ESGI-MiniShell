@@ -74,13 +74,25 @@ void print_children_ls_l(branch *b){
     return;
 }
 
+int print_children_folder_ls(){
+    
+
+
+}
+
 int minishell_ls(Shell *shell, int argc, char **argv){
 
     if(argc > 0){
 
-        if(strcmp((char *)argv, "-l") == 0){
+        if(strcmp(argv[0], "-l") == 0){
             print_children_ls_l(shell->cwd);
             return 0;
+        }
+    }
+
+    if(argc > 0){
+        if(strcmp(argv[0], "/") == 0){
+            // to be continued
         }
     }
 
