@@ -153,14 +153,17 @@ char *extract_token(char *buffer, int *cursor, char *accepted) {
  * la liste des séparateurs fournie. Les séparateurs par défaut (NULL en
  * argument) sont les caractères d'espacement.
  */
-Node *lexer(char *accepted) {
-  char c;
+Node *lexer(char *str, char *accepted) {
+  char c, *input;
   Node *n = NULL;
   int i = 0;
 
-  char *input = buffer_allocation();
-  if (!input)
-    return NULL;
+  if (!str) {
+    input = buffer_allocation();
+    if (!input)
+      return NULL;
+  } else
+    input = str;
 
   while ((c = input[i]) != '\0') {
     char *token;
@@ -177,7 +180,9 @@ Node *lexer(char *accepted) {
     free(token);
   }
 
-  free(input);
+  if (!str)
+    free(input);
+
   return n;
 }
 
