@@ -157,7 +157,7 @@ Test(lexer, basique) {
 
   freopen(filename, "r", stdin);
 
-  Node *got = lexer();
+  Node *got = lexer(NULL);
 
   Node_print(got);
   for (n = got; n; n = n->next) {
@@ -190,7 +190,7 @@ Test(lexer, double_quotes) {
 
   freopen(filename, "r", stdin);
 
-  Node *got = lexer();
+  Node *got = lexer(NULL);
 
   Node_print(got);
   for (n = got; n; n = n->next) {
@@ -223,7 +223,7 @@ Test(lexer, double_quotes_empty) {
 
   freopen(filename, "r", stdin);
 
-  Node *got = lexer();
+  Node *got = lexer(NULL);
 
   Node_print(got);
   for (n = got; n; n = n->next) {
@@ -252,9 +252,42 @@ Test(lexer, no_command) {
 
   freopen(filename, "r", stdin);
 
-  Node *got = lexer();
+  Node *got = lexer(NULL);
 
   cr_expect_null(got);
+
+  lexer_free(&got);
+}
+
+Test(lexer, slash_as_a_separator) {
+  Node *n;
+  FILE *f;
+  char *filename = "build/lexer.slash_as_a_separator.criterion.test";
+  char *input = "foo/toto/truc/machin";
+  char *expected[] = {"foo", "toto", "truc", "machin"};
+  int size = 4;
+  int i = 0, count = 0;
+
+  cr_assert_not_null(f = fopen(filename, "w"));
+
+  fprintf(f, input);
+  fclose(f);
+
+  freopen(filename, "r", stdin);
+
+  Node *got = lexer("/");
+
+  Node_print(got);
+  for (n = got; n; n = n->next) {
+    if (i < size) {
+      cr_expect_str_eq(n->data, expected[i], "Got: %s, Expected: %s\n", n->data,
+                       expected[i]);
+      i++;
+    }
+    count++;
+  }
+
+  cr_expect_eq(i, count);
 
   lexer_free(&got);
 }

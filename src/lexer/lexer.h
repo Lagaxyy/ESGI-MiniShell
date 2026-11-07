@@ -7,7 +7,7 @@ struct Node {
 };
 typedef struct Node Node;
 
-Node *lexer();
+Node *lexer(char *accepted);
 void lexer_free(Node **n);
 
 #endif /* LEXER_H */

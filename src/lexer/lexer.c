@@ -89,7 +89,16 @@ void Node_free(Node *n) {
 
 int is_quote(char c) { return c == '\'' || c == '"'; }
 
-char *extract_token(char *buffer, int *cursor) {
+int is_a_separator(char *accepted, char c) {
+  if (!accepted) {
+    return isspace(c);
+  }
+
+  char temp[] = {c, '\0'};
+  return strpbrk(temp, accepted) != NULL || c == '\n';
+}
+
+char *extract_token(char *buffer, int *cursor, char *accepted) {
   char c;
   char *token;
   int isQuote = 0;
@@ -108,7 +117,8 @@ char *extract_token(char *buffer, int *cursor) {
   }
 
   c = buffer[s + i];
-  while (c != '\0' && ((isQuote) ? !is_quote(c) : !isspace(c))) {
+  while (c != '\0' &&
+         ((isQuote) ? !is_quote(c) : !is_a_separator(accepted, c))) {
     if (i + 1 >= capacity) {
       char *temp;
 
@@ -138,7 +148,12 @@ char *extract_token(char *buffer, int *cursor) {
   return token;
 }
 
-Node *lexer() {
+/**
+ * Transforme une chaîne de caractères en une liste chaînée de tokens, suivant
+ * la liste des séparateurs fournie. Les séparateurs par défaut (NULL en
+ * argument) sont les caractères d'espacement.
+ */
+Node *lexer(char *accepted) {
   char c;
   Node *n = NULL;
   int i = 0;
@@ -150,12 +165,12 @@ Node *lexer() {
   while ((c = input[i]) != '\0') {
     char *token;
 
-    if (isspace(c)) {
+    if (is_a_separator(accepted, c)) {
       i++;
       continue;
     }
 
-    if ((token = extract_token(input, &i)) == NULL) {
+    if ((token = extract_token(input, &i, accepted)) == NULL) {
       break;
     }
     n = Node_add(n, token);
