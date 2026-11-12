@@ -1,27 +1,39 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "commands.h"
 
-void print_children_ls(branch *b) {
+void print_children_ls(branch *b)
+{
   branch *fs = b->first_child;
 
-  if (fs->type == Folder) {
+  if (fs->type == Folder)
+  {
     printf("\033[1;34m%s\033[0m", (char *)fs);
-  } else if (fs->type == File) {
+  }
+  else if (fs->type == File)
+  {
     printf("%s", (char *)fs);
   }
 
-  while (fs != NULL) {
+  while (fs != NULL)
+  {
     fs = fs->next_sibling;
-    if (fs != NULL) {
+    if (fs != NULL)
+    {
 
-      if (fs->type == Folder) {
-        printf("    \033[1;34m%s\033[0m", (char *)fs);
-      } else if (fs->type == File) {
-        printf("    %s", (char *)fs);
+      if (fs->type == Folder)
+      {
+        printf("    \033[1;34m%s\033[0m", fs->nom);
       }
-    } else {
+      else if (fs->type == File)
+      {
+        printf("    %s", fs->nom);
+      }
+    }
+    else
+    {
       break;
     }
   }
@@ -29,14 +41,15 @@ void print_children_ls(branch *b) {
   return;
 }
 
-void print_children_ls_l(branch *b) {
+void print_children_ls_l(branch *b)
+{
 
   int number_of_files;
   int i = 0;
   branch *fs = b->first_child;
 
-
-  while (fs != NULL) {
+  while (fs != NULL)
+  {
     fs = fs->next_sibling;
     i++;
   }
@@ -46,20 +59,28 @@ void print_children_ls_l(branch *b) {
 
   fs = b->first_child;
 
-  if (fs->type == Folder) {
-    printf("\033[1;34m%s\033[0m", (char *)fs);
-  } else if (fs->type == File) {
-    printf("%s", (char *)fs);
+  if (fs->type == Folder)
+  {
+    printf("\033[1;34m%s\033[0m", fs->nom);
+  }
+  else if (fs->type == File)
+  {
+    printf("%s", fs->nom);
   }
 
-  while (fs != NULL) {
+  while (fs != NULL)
+  {
     fs = fs->next_sibling;
 
-    if (fs != NULL) {
-      if (fs->type == Folder) {
-        printf("    \033[1;34m%s\033[0m", (char *)fs);
-      } else if (fs->type == File) {
-        printf("    %s", (char *)fs);
+    if (fs != NULL)
+    {
+      if (fs->type == Folder)
+      {
+        printf("    \033[1;34m%s\033[0m", fs->nom);
+      }
+      else if (fs->type == File)
+      {
+        printf("    %s", fs->nom);
       }
     }
   }
@@ -68,14 +89,61 @@ void print_children_ls_l(branch *b) {
   return;
 }
 
-int minishell_ls(Shell *shell, int argc, char **argv) {
+int print_directory_ls(char *argv, branch *b)
+{
 
-  if (argc > 0) {
+  Node *tokens = lexer(argv, "/");
+  branch *cur = b;
 
-    for (int i = 0; i <= 10; i++) {
-      if (strcmp(argv[i], "-l") == 0) {
+  for (Node *t = tokens; t != NULL; t = tokens->next)
+  {
+
+    branch *fs = cur->first_child;
+
+    while (fs != NULL && strcmp(fs->nom, t->data))
+    {
+      fs = fs->next_sibling;
+    }
+    if (fs == NULL)
+    {
+      printf("La destination n'a pas été trouvé\n");
+      free(tokens);
+      return 127;
+    }
+    cur = fs;
+  }
+
+  for (branch *fs = cur->first_child; fs != NULL; fs = fs->next_sibling)
+  {
+    printf("%s\n", fs->nom);
+  }
+  free(tokens);
+  return 0;
+}
+
+int minishell_ls(Shell *shell, int argc, char **argv)
+{
+
+  if (argc > 0)
+  {
+
+    for (int i = 0; i <= argc; i++)
+    {
+      if (strcmp(argv[i], "-l") == 0)
+      {
         print_children_ls_l(shell->cwd);
         return 0;
+      }
+      else if (strcmp(argv[i], "/"))
+      {
+        print_directory_ls(argv[i], shell->root);
+        /*      Pourquoi un "ls / donne une erreur ? (probleme avec le command handler)"
+         */
+      }
+      else
+      {
+        printf("Argument inconnu\n");
+        return 127;
       }
     }
   }
