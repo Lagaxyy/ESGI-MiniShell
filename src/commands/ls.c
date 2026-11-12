@@ -164,7 +164,7 @@ int minishell_ls(Shell *shell, int argc, char **argv)
         print_children_ls_l(shell->cwd);
         return 0;
       }
-      else if (strcmp(argv[i], "/"))
+      else if (strstr(argv[i], "/") != NULL)
       {
         print_directory_ls(argv[i], shell->root);
         /*      Pourquoi un "ls /" donne une erreur ? (probleme avec le command handler)"
