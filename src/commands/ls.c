@@ -96,6 +96,7 @@ int print_directory_ls(char *argv, branch *b)
 
   Node *tokens = lexer(argv, "/");
   branch *cur = b;
+  int f_count = 0;
 
   for (Node *t = tokens; t != NULL; t = tokens->next)
   {
@@ -117,8 +118,34 @@ int print_directory_ls(char *argv, branch *b)
 
   for (branch *fs = cur->first_child; fs != NULL; fs = fs->next_sibling)
   {
-    printf("%s\n", fs->nom);
+    if (fs->type == Folder)
+    {
+      if (f_count == 0)
+      {
+        printf("\033[1;34m%s\033[0m", fs->nom);
+        f_count++;
+      }
+      else
+      {
+        printf("  \033[1;34m%s\033[0m", fs->nom);
+        f_count++;
+      }
+    }
+    else
+    {
+      if (f_count == 0)
+      {
+        printf("%s", fs->nom);
+        f_count++;
+      }
+      else
+      {
+        printf("  %s", fs->nom);
+        f_count++;
+      }
+    }
   }
+  printf("\n");
 
   free(tokens);
   return 0;
