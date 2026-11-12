@@ -108,7 +108,7 @@ int print_directory_ls(char *argv, branch *b)
     }
     if (fs == NULL)
     {
-      printf("La destination n'a pas été trouvé\n");
+      printf("ls : impossible d'accéder à \"%s\" : Aucun fichier ou dossier de ce type\n", argv);
       free(tokens);
       return 127;
     }
