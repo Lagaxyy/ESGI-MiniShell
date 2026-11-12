@@ -177,7 +177,6 @@ int minishell_ls(Shell *shell, int argc, char **argv)
       }
     }
   }
-
   if (argc == 0)
   {
     print_children_ls(shell->cwd);
