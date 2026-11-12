@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "commands.h"
+
+bool exec = false;
 
 void print_children_ls(branch *b)
 {
@@ -37,7 +40,9 @@ void print_children_ls(branch *b)
       break;
     }
   }
+
   printf("\n");
+  exec = true;
   return;
 }
 
@@ -86,6 +91,7 @@ void print_children_ls_l(branch *b)
   }
 
   printf("\n");
+  exec = true;
   return;
 }
 
@@ -107,6 +113,7 @@ int print_directory_ls(char *argv, branch *b)
     if (fs == NULL)
     {
       printf("La destination n'a pas été trouvé\n");
+      exec = true;
       free(tokens);
       return 127;
     }
@@ -117,7 +124,9 @@ int print_directory_ls(char *argv, branch *b)
   {
     printf("%s\n", fs->nom);
   }
+
   free(tokens);
+  exec = true;
   return 0;
 }
 
@@ -127,7 +136,7 @@ int minishell_ls(Shell *shell, int argc, char **argv)
   if (argc > 0)
   {
 
-    for (int i = 0; i <= argc; i++)
+    for (int i = 0; i < argc; i++)
     {
       if (strcmp(argv[i], "-l") == 0)
       {
@@ -148,6 +157,9 @@ int minishell_ls(Shell *shell, int argc, char **argv)
     }
   }
 
-  print_children_ls(shell->cwd);
+  if (exec == false)
+  {
+    print_children_ls(shell->cwd);
+  }
   return 0;
 }
