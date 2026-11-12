@@ -146,7 +146,7 @@ int minishell_ls(Shell *shell, int argc, char **argv)
       else if (strcmp(argv[i], "/"))
       {
         print_directory_ls(argv[i], shell->root);
-        /*      Pourquoi un "ls / donne une erreur ? (probleme avec le command handler)"
+        /*      Pourquoi un "ls /" donne une erreur ? (probleme avec le command handler)"
          */
       }
       else
