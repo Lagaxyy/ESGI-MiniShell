@@ -6,9 +6,10 @@
 
 static const Command commands[] = {
     {"pwd", "Affiche le chemin absolu du répertoire courant", minishell_pwd,
-     "pwd"},
-    {"help", "Montre la liste des commandes", command_help, "help"},
-    {NULL, NULL, NULL},
+     "pwd", NULL},
+    {"help", "Montre la liste des commandes", command_help, "help", NULL},
+    {"ls", "Affiche le contenu d'un répertoire", minishell_ls, "ls", "-l : Informations plus précises"},
+    {NULL, NULL, NULL, NULL}
 };
 
 const Command *command_find(const char *name) {
@@ -33,7 +34,13 @@ int command_help(Shell *shell, int argc, char **argv) {
   printf("Liste des commandes:\n");
   while (command.name != NULL) {
     printf("\t%s: %s\n", command.name, command.description);
-    printf("\t=> %s\n\n", command.usage);
+    printf("\t=> %s\n", command.usage);
+    if(command.args != NULL){
+      printf("\t => %s\n\n", command.args);
+    }
+    else{
+      printf("\n");
+    }
 
     command = commands[++i];
   }

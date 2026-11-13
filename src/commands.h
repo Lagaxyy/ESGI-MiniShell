@@ -6,7 +6,7 @@
 
 typedef struct Shell {
   branch *root;
-  branch *cwd;
+  branch *cwd; // current position
   int debug_mode;
 } Shell;
 
@@ -17,6 +17,7 @@ typedef struct Command {
   char *description;
   command_func f;
   char *usage;
+  char *args;
 } Command;
 
 const Command *command_find(const char *name);
@@ -24,5 +25,7 @@ int command_help(Shell *shell, int argc, char **argv);
 
 /* Prototypes des commandes */
 int minishell_pwd(Shell *shell, int argc, char **argv);
+
+int minishell_ls(Shell *shell, int argc, char **argv);
 
 #endif /* COMMANDS_H */
