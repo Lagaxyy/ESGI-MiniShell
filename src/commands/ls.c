@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 #include "commands.h"
 
@@ -236,3 +235,5 @@ int minishell_ls(Shell *shell, int argc, char **argv)
 
   return 0;
 }
+
+/* TODO : Cacher tous les fichiers dont le nom commence par "." */
