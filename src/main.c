@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
   {
     return 1;
   }
-  if ((n1 = branch_create("n1", Folder)) == NULL)
+  if ((n1 = branch_create("/", Folder)) == NULL)
   {
     return 1;
   }

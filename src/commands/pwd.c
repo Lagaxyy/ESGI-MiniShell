@@ -8,7 +8,7 @@ void recursive_print_pwd(branch *b) {
   }
 
   recursive_print_pwd(b->parent);
-  printf("/%s", b->nom);
+  printf("%s", b->nom);
 }
 
 int minishell_pwd(Shell *shell, int argc, char **argv) {
