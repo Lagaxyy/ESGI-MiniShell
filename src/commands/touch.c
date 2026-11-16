@@ -14,7 +14,7 @@ void touch_cur(char *argv, branch *b)
 void touch_root(char *argv, branch *b)
 {
 
-/* NE FONCTIONNE PAS */
+    /* NE FONCTIONNE PAS */
 
     Node *tokens = lexer(argv, "/");
 
@@ -36,24 +36,29 @@ void touch_root(char *argv, branch *b)
 
         while (strcmp(path->nom, t->data) != 0)
         {
-            path = path->first_child;
+
             if (path == NULL)
             {
                 printf("Folder doesn't exist\n");
             }
+
+            path = path->first_child;
         }
         while (strcmp(path->nom, t->data) != 0)
         {
-            path = path->next_sibling;
+
             if (path == NULL)
             {
                 printf("Folder doesn't exist\n");
             }
+
+            path = path->next_sibling;
         }
         if (strcmp(prev->data, t->data) == 0)
         {
             branch *nb = branch_create(last->data, File);
-            branch_add_child(path->first_child, nb);
+            branch_add_child(path, nb);
+            printf("created\n");
             break;
         }
     }
