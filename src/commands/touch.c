@@ -11,16 +11,13 @@ void touch_cur(char *argv, branch *b)
     branch_add_child(b, nb);
 }
 
-void touch_root(char *argv, branch *b)
+int touch_root(char *argv, branch *b)
 {
 
-    /* NE FONCTIONNE PAS */
-
     Node *tokens = lexer(argv, "/");
+    branch *cur = b;
 
     Node *t = NULL;
-
-    branch *path = b;
 
     Node *prev = NULL;
     Node *last = NULL;
@@ -31,37 +28,38 @@ void touch_root(char *argv, branch *b)
         last = t;
     }
 
-    for (t = tokens; t != NULL; t = t->next)
+    for (Node *t = tokens; t != prev; t = t->next)
     {
 
-        while (strcmp(path->nom, t->data) != 0)
+        branch *fs = cur->first_child;
+
+        while (fs != NULL && strcmp(fs->nom, t->data) != 0)
         {
-
-            if (path == NULL)
-            {
-                printf("Folder doesn't exist\n");
-            }
-
-            path = path->first_child;
+            fs = fs->next_sibling;
         }
-        while (strcmp(path->nom, t->data) != 0)
+        if (fs == NULL)
         {
-
-            if (path == NULL)
-            {
-                printf("Folder doesn't exist\n");
-            }
-
-            path = path->next_sibling;
+            printf("ls : impossible d'accéder à \"%s\" : Aucun fichier ou dossier de ce type\n", argv);
+            free(tokens);
+            return 127;
         }
-        if (strcmp(prev->data, t->data) == 0)
+        cur = fs;
+    }
+
+    for (branch *fs = cur->first_child; fs != NULL; fs = fs->next_sibling)
+    {
+        if (fs->type == Folder)
         {
             branch *nb = branch_create(last->data, File);
-            branch_add_child(path, nb);
+            branch_add_child(fs, nb);
             printf("created\n");
             break;
         }
     }
+    printf("\n");
+
+    free(tokens);
+    return 0;
 }
 
 int minishell_touch(Shell *shell, int argc, char **argv)
