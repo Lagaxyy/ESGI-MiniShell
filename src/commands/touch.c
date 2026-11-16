@@ -39,7 +39,7 @@ int touch_root(char *argv, branch *b)
         }
         if (fs == NULL)
         {
-            printf("ls : impossible d'accéder à \"%s\" : Aucun fichier ou dossier de ce type\n", argv);
+            printf("ls : impossible d'accéder à \"%s\" : Aucun dossier de ce type\n", argv);
             free(tokens);
             return 127;
         }
@@ -48,7 +48,13 @@ int touch_root(char *argv, branch *b)
 
     for (branch *fs = cur->first_child; fs != NULL; fs = fs->next_sibling)
     {
-        if (fs->type == Folder)
+        if (fs == NULL)
+        {
+            printf("ls : impossible d'accéder à \"%s\" : Aucun dossier de ce type\n", argv);
+            free(tokens);
+            return 127;
+        }
+        if (fs->type == Folder && strcmp(prev->data, fs->nom) == 0)
         {
             branch *nb = branch_create(last->data, File);
             branch_add_child(fs, nb);
