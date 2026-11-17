@@ -1,0 +1,71 @@
+# BROUILLON DES MISSIONS DU MINISHELL
+
+# SOMMAIRE #
+
+Mission 1 - Commande pwd
+Mission 2 - Commande cd
+Mission 3 - Commande ls
+Mission 4 - Commande cat
+Mission 5 - Commande find
+Mission 6 - Commande rm
+Mission 7 - Commande cp
+Mission 8 - Toutes les commandes
+
+
+# CONTENU #
+
+**Intro à définir**
+
+##################
+#                #
+#    Mission 1   #
+#                #
+##################
+
+Votre mission : Trouver votre emplacement par rapport à l'entrée de l'ESGI
+
+Votre outil : pwd
+
+Utilsation : 
+    => pwd
+
+------------------
+
+##################
+#                #
+#    Mission 2   #
+#                #
+##################
+
+Votre mission : Trouver la salle 02 à Erard et vous y rendre
+
+Vos outils : tree + cd
+
+Utilsation : 
+
+tree
+    => tree
+
+cd
+    => cd <arguments> 
+    Arguments :
+        => .. : Retourner d'un repertoire en arrière
+
+------------------
+
+##################
+#                #
+#    Mission 3   #
+#                #
+##################
+
+Votre mission : Trouver l'identifiant de la copie de dans la salle 02 d'Erard [Nom/Prenom à définir]
+
+Votre outil : ls
+
+Utilsation : 
+ls
+    => ls 
+    => ls <arguments> <votre/chemin> 
+    Arguments :
+        => -l : Voir plus de détails
