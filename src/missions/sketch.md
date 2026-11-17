@@ -3,7 +3,7 @@
 # SOMMAIRE #
 
 Mission 1 - Commande pwd
-Mission 2 - Commande cd
+Mission 2 - Commande tree + cd
 Mission 3 - Commande ls
 Mission 4 - Commande cat
 Mission 5 - Commande find
