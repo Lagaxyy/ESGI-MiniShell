@@ -20,6 +20,20 @@ branch *branch_create(char *nom, branch_type type) {
   return p;
 }
 
+branch *branch_find_child(branch *parent, char *nom) {
+  if(!parent)
+    return  NULL;
+  
+  branch *c;
+  
+  for (c = parent->first_child; c != NULL; c = c->next_sibling) {
+    if (strcmp(c->nom, nom)==0)
+      return c;
+  }
+
+  return NULL;
+}
+
 branch *branch_find(branch *b, char *nom) {
   if (!b) {
     return NULL;
@@ -40,24 +54,22 @@ branch *branch_find(branch *b, char *nom) {
   return NULL;
 }
 
+
+
 int branch_add_child(branch *parent, branch *child) {
   if (parent->type != Folder) {
     return EXIT_FAILURE;
   }
 
+  if (branch_find_child(parent, child->nom)) // évite ajout dossier ou fichier de même nom directement ici
+    return EXIT_FAILURE;
+
   if (parent->first_child == NULL) {
     parent->first_child = child;
     child->parent = parent;
   } else {
-    if (!strcmp(parent->first_child->nom, child->nom)) {
-      return EXIT_FAILURE;
-    }
-
     branch *dernier = parent->first_child;
     while (dernier->next_sibling != NULL) {
-      if (!strcmp(dernier->nom, child->nom)) {
-        return EXIT_FAILURE;
-      }
       dernier = dernier->next_sibling;
     }
     child->parent = parent;
@@ -65,6 +77,7 @@ int branch_add_child(branch *parent, branch *child) {
   }
   return EXIT_SUCCESS;
 }
+
 
 void branch_print(branch *b, int depth) {
   for (int i = 0; i < depth; i++) {
