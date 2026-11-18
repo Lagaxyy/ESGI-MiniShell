@@ -70,9 +70,7 @@ void branch_print(branch *b, int depth) {
   for (int i = 0; i < depth; i++) {
     printf("  ");
   }
-  printf("%s\n",
-         b->nom); // à la fin du nom si c'est un dossier, ajouter un slash
-  // printf("%s%s", b->nom, blabla)
+  printf("%s%s\n", b->nom, (b->type == Folder) ? "/" : "");
 
   for (branch *n = b->first_child; n != NULL; n = n->next_sibling) {
     branch_print(n, depth + 1);
