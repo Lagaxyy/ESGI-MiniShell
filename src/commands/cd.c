@@ -20,37 +20,6 @@ int minishell_cd(Shell *shell, int argc, char **argv) {
     return EXIT_SUCCESS;
   }
 
-  
-  /* Version avant gestion des chemins */
-  /*// cd .
-  if (!strcmp(argv[0], "."))
-    return EXIT_SUCCESS;
-
-  // cd ..
-  if (!strcmp(argv[0], "..")) {
-    if (shell->cwd->parent)
-        shell->cwd = shell->cwd->parent;
-    return EXIT_SUCCESS;
-  }
-
-  // cd target
-  branch *target;
-  target = branch_find_child(shell->cwd, argv[0]);
-
-  if (!target) {
-    printf("cd : \"%s\" est introuvable\n", argv[0]);
-    return EXIT_FAILURE;
-  }
-
-  if (target->type != Folder) {
-    printf("cd : \"%s\" n'est pas un dossier\n", target->nom);
-    return EXIT_FAILURE;
-  }
-
-  shell->cwd = target;*/
-
- /* Version avec gestion des chemins */
-
   branch *current_branch;
 
   if (argv[0][0] == '/')
@@ -59,29 +28,19 @@ int minishell_cd(Shell *shell, int argc, char **argv) {
     current_branch = shell->cwd;
 
   Node *first_word = lexer(argv[0], "/");
-  Node *current_word = first_word;
+  Node *current_word;
 
-  // cd [chemin absolu]
-  if (argv[0][0] == '/' && current_word != NULL) {
-    if (strcmp(current_word->data, shell->root->nom) != 0) {
-      printf("cd : un chemin absolu doit commencer par \"%s\"\n", shell->root->nom);
-      lexer_free(&first_word);
-      return EXIT_FAILURE;
-    }
-    current_word = current_word->next;
-  }
-
-  for (; current_word != NULL; current_word = current_word->next ) {
+  for (current_word = first_word; current_word != NULL; current_word = current_word->next ) {
     // cd.
     if (!strcmp(current_word->data, ".")){
-        // on fait rien, j'hésite à supprimer ce cas
+        // on fait rien, trouver un autre moyen -- peut-être un continue pour rendre joli
     }
     // cd ..
     else if (!strcmp(current_word->data, "..")) {
         if (current_branch->parent)
             current_branch = current_branch->parent;
     }
-    // cd [chemin relatif]
+    // cd [chemin]
     else {
         branch *target = branch_find_child(current_branch, current_word->data);
 
