@@ -1,0 +1,16 @@
+FOLDER "n1" [
+	FOLDER "n2" [
+		FOLDER "n3" [
+            FILE "n6"
+        ]
+		FILE "n4"
+		FOLDER "n5"
+        FILE "n7"
+        FOLDER "n8" [
+            FOLDER "n9"
+            FILE "n10"
+            FILE "n11"
+        ]
+	]
+    FILE "n12"
+]
