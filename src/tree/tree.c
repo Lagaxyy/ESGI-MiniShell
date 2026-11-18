@@ -21,13 +21,13 @@ branch *branch_create(char *nom, branch_type type) {
 }
 
 branch *branch_find_child(branch *parent, char *nom) {
-  if(!parent)
-    return  NULL;
-  
+  if (!parent)
+    return NULL;
+
   branch *c;
-  
+
   for (c = parent->first_child; c != NULL; c = c->next_sibling) {
-    if (strcmp(c->nom, nom)==0)
+    if (strcmp(c->nom, nom) == 0)
       return c;
   }
 
@@ -54,14 +54,13 @@ branch *branch_find(branch *b, char *nom) {
   return NULL;
 }
 
-
-
 int branch_add_child(branch *parent, branch *child) {
   if (parent->type != Folder) {
     return EXIT_FAILURE;
   }
 
-  if (branch_find_child(parent, child->nom)) // évite ajout dossier ou fichier de même nom directement ici
+  if (branch_find_child(parent, child->nom)) // évite ajout dossier ou fichier
+                                             // de même nom directement ici
     return EXIT_FAILURE;
 
   if (parent->first_child == NULL) {
@@ -78,14 +77,11 @@ int branch_add_child(branch *parent, branch *child) {
   return EXIT_SUCCESS;
 }
 
-
 void branch_print(branch *b, int depth) {
   for (int i = 0; i < depth; i++) {
     printf("  ");
   }
-  printf("%s\n",
-         b->nom); // à la fin du nom si c'est un dossier, ajouter un slash
-  // printf("%s%s", b->nom, blabla)
+  printf("%s%s\n", b->nom, (b->type == Folder) ? "/" : "");
 
   for (branch *n = b->first_child; n != NULL; n = n->next_sibling) {
     branch_print(n, depth + 1);
