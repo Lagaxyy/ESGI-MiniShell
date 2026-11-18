@@ -1,7 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 
-typedef enum { Lieu, Objet } branch_type;
+typedef enum { Folder, File } branch_type;
 
 typedef struct branch branch;
 struct branch {
@@ -14,6 +14,7 @@ struct branch {
 
 branch *branch_create(char *nom, branch_type type);
 branch *branch_find(branch *b, char *nom);
+branch *branch_find_child(branch *parent, char *nom);
 int branch_add_child(branch *parent, branch *child);
 void branch_print(branch *b, int depth);
 void branch_free(branch *p);

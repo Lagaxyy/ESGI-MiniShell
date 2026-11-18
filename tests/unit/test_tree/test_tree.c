@@ -7,7 +7,7 @@
 TestSuite(tree, .description = "Unit tests for the branch tree API");
 
 Test(tree, create_returns_a_branch_for_a_lieu) {
-  branch *b = branch_create("root", Lieu);
+  branch *b = branch_create("root", Folder);
 
   cr_assert_not_null(b);
 
@@ -15,7 +15,7 @@ Test(tree, create_returns_a_branch_for_a_lieu) {
 }
 
 Test(tree, create_returns_a_branch_for_an_objet) {
-  branch *b = branch_create("file.txt", Objet);
+  branch *b = branch_create("file.txt", File);
 
   cr_assert_not_null(b);
 
@@ -23,14 +23,14 @@ Test(tree, create_returns_a_branch_for_an_objet) {
 }
 
 Test(tree, create_rejects_an_empty_name) {
-  branch *lieu = branch_create("", Lieu);
-  branch *objet = branch_create("", Objet);
+  branch *folder = branch_create("", Folder);
+  branch *file = branch_create("", File);
 
-  cr_expect_null(lieu);
-  cr_expect_null(objet);
+  cr_expect_null(folder);
+  cr_expect_null(file);
 
-  branch_free(lieu);
-  branch_free(objet);
+  branch_free(folder);
+  branch_free(file);
 }
 
 Test(tree, create_rejects_a_name_of_64_characters) {
@@ -40,7 +40,7 @@ Test(tree, create_rejects_a_name_of_64_characters) {
   memset(name, 'n', sizeof(name) - 1);
   name[sizeof(name) - 1] = '\0';
 
-  b = branch_create(name, Lieu);
+  b = branch_create(name, Folder);
 
   cr_expect_null(b);
 
@@ -49,13 +49,13 @@ Test(tree, create_rejects_a_name_of_64_characters) {
 
 Test(tree, create_accepts_a_name_of_63_characters) {
   char name[64];
-  branch *root = branch_create("root", Lieu);
+  branch *root = branch_create("root", Folder);
   branch *child;
 
   memset(name, 'n', sizeof(name) - 1);
   name[sizeof(name) - 1] = '\0';
 
-  child = branch_create(name, Lieu);
+  child = branch_create(name, Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(child);
@@ -66,9 +66,9 @@ Test(tree, create_accepts_a_name_of_63_characters) {
 }
 
 Test(tree, create_preserves_special_characters) {
-  branch *root = branch_create("root", Lieu);
-  branch *child = branch_create("a b-c_d_e.txt (1)", Objet);
-  branch *with_slash = branch_create("a b/c-d_e.txt (1)", Objet);
+  branch *root = branch_create("root", Folder);
+  branch *child = branch_create("a b-c_d_e.txt (1)", File);
+  branch *with_slash = branch_create("a b/c-d_e.txt (1)", File);
 
   cr_assert_not_null(root);
   cr_assert_not_null(child);
@@ -82,18 +82,18 @@ Test(tree, create_preserves_special_characters) {
 }
 
 Test(tree, create_rejects_a_null_name) {
-  branch *lieu = branch_create(NULL, Lieu);
-  branch *objet = branch_create(NULL, Objet);
+  branch *folder = branch_create(NULL, Folder);
+  branch *file = branch_create(NULL, File);
 
-  cr_expect_null(lieu);
-  cr_expect_null(objet);
+  cr_expect_null(folder);
+  cr_expect_null(file);
 
-  branch_free(lieu);
-  branch_free(objet);
+  branch_free(folder);
+  branch_free(file);
 }
 
 Test(tree, create_accepts_a_one_character_name) {
-  branch *b = branch_create("x", Lieu);
+  branch *b = branch_create("x", Folder);
 
   cr_assert_not_null(b);
   cr_expect_str_eq(b->nom, "x");
@@ -105,43 +105,43 @@ Test(tree, create_rejects_a_slash_in_any_position) {
   char *names[] = {"a/b", "/a", "a/", "/"};
 
   for (size_t i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
-    branch *lieu = branch_create(names[i], Lieu);
-    branch *objet = branch_create(names[i], Objet);
+    branch *folder = branch_create(names[i], Folder);
+    branch *file = branch_create(names[i], File);
 
-    cr_expect_null(lieu);
-    cr_expect_null(objet);
+    cr_expect_null(folder);
+    cr_expect_null(file);
 
-    branch_free(lieu);
-    branch_free(objet);
+    branch_free(folder);
+    branch_free(file);
   }
 }
 
 Test(tree, create_initializes_every_field) {
-  branch *lieu = branch_create("root", Lieu);
-  branch *objet = branch_create("file.txt", Objet);
+  branch *folder = branch_create("root", Folder);
+  branch *file = branch_create("file.txt", File);
 
-  cr_assert_not_null(lieu);
-  cr_assert_not_null(objet);
+  cr_assert_not_null(folder);
+  cr_assert_not_null(file);
 
-  cr_expect_str_eq(lieu->nom, "root");
-  cr_expect_eq(lieu->type, Lieu);
-  cr_expect_null(lieu->parent);
-  cr_expect_null(lieu->next_sibling);
-  cr_expect_null(lieu->first_child);
+  cr_expect_str_eq(folder->nom, "root");
+  cr_expect_eq(folder->type, Folder);
+  cr_expect_null(folder->parent);
+  cr_expect_null(folder->next_sibling);
+  cr_expect_null(folder->first_child);
 
-  cr_expect_str_eq(objet->nom, "file.txt");
-  cr_expect_eq(objet->type, Objet);
-  cr_expect_null(objet->parent);
-  cr_expect_null(objet->next_sibling);
-  cr_expect_null(objet->first_child);
+  cr_expect_str_eq(file->nom, "file.txt");
+  cr_expect_eq(file->type, File);
+  cr_expect_null(file->parent);
+  cr_expect_null(file->next_sibling);
+  cr_expect_null(file->first_child);
 
-  branch_free(lieu);
-  branch_free(objet);
+  branch_free(folder);
+  branch_free(file);
 }
 
 Test(tree, create_copies_the_name) {
   char name[16] = "original";
-  branch *b = branch_create(name, Lieu);
+  branch *b = branch_create(name, Folder);
 
   cr_assert_not_null(b);
 
@@ -153,7 +153,7 @@ Test(tree, create_copies_the_name) {
 }
 
 Test(tree, find_child_on_an_empty_parent_returns_null) {
-  branch *root = branch_create("root", Lieu);
+  branch *root = branch_create("root", Folder);
 
   cr_assert_not_null(root);
   cr_expect_null(branch_find(root, "child"));
@@ -163,10 +163,10 @@ Test(tree, find_child_on_an_empty_parent_returns_null) {
 }
 
 Test(tree, find_child_finds_each_sibling) {
-  branch *root = branch_create("root", Lieu);
-  branch *one = branch_create("one", Lieu);
-  branch *two = branch_create("two", Lieu);
-  branch *three = branch_create("three", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *one = branch_create("one", Folder);
+  branch *two = branch_create("two", Folder);
+  branch *three = branch_create("three", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(one);
@@ -184,8 +184,8 @@ Test(tree, find_child_finds_each_sibling) {
 }
 
 Test(tree, find_child_returns_null_for_an_unknown_name) {
-  branch *root = branch_create("root", Lieu);
-  branch *child = branch_create("child", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *child = branch_create("child", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(child);
@@ -199,8 +199,8 @@ Test(tree, find_child_returns_null_for_an_unknown_name) {
 }
 
 Test(tree, find_child_is_case_sensitive) {
-  branch *root = branch_create("root", Lieu);
-  branch *child = branch_create("Alpha", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *child = branch_create("Alpha", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(child);
@@ -214,8 +214,8 @@ Test(tree, find_child_is_case_sensitive) {
 }
 
 Test(tree, find_child_requires_an_exact_name) {
-  branch *root = branch_create("root", Lieu);
-  branch *child = branch_create("foo", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *child = branch_create("foo", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(child);
@@ -231,11 +231,11 @@ Test(tree, find_child_requires_an_exact_name) {
 }
 
 Test(tree, find_child_searches_the_whole_subtree) {
-  branch *root = branch_create("root", Lieu);
-  branch *left = branch_create("left", Lieu);
-  branch *right = branch_create("right", Lieu);
-  branch *left_leaf = branch_create("left_leaf", Lieu);
-  branch *right_leaf = branch_create("right_leaf", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *left = branch_create("left", Folder);
+  branch *right = branch_create("right", Folder);
+  branch *left_leaf = branch_create("left_leaf", Folder);
+  branch *right_leaf = branch_create("right_leaf", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(left);
@@ -263,7 +263,7 @@ Test(tree, find_accepts_a_null_tree) {
 }
 
 Test(tree, find_with_a_null_name_returns_null) {
-  branch *root = branch_create("root", Lieu);
+  branch *root = branch_create("root", Folder);
 
   cr_assert_not_null(root);
   cr_expect_null(branch_find(root, NULL));
@@ -272,11 +272,11 @@ Test(tree, find_with_a_null_name_returns_null) {
 }
 
 Test(tree, find_returns_the_first_match_when_names_are_duplicated) {
-  branch *root = branch_create("root", Lieu);
-  branch *left = branch_create("left", Lieu);
-  branch *right = branch_create("right", Lieu);
-  branch *left_same = branch_create("same", Lieu);
-  branch *right_same = branch_create("same", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *left = branch_create("left", Folder);
+  branch *right = branch_create("right", Folder);
+  branch *left_same = branch_create("same", Folder);
+  branch *right_same = branch_create("same", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(left);
@@ -294,8 +294,8 @@ Test(tree, find_returns_the_first_match_when_names_are_duplicated) {
 }
 
 Test(tree, add_child_returns_exit_success_when_it_links_a_child) {
-  branch *root = branch_create("root", Lieu);
-  branch *child = branch_create("child", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *child = branch_create("child", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(child);
@@ -307,8 +307,8 @@ Test(tree, add_child_returns_exit_success_when_it_links_a_child) {
 }
 
 Test(tree, add_child_accepts_an_objet_child) {
-  branch *root = branch_create("root", Lieu);
-  branch *child = branch_create("file", Objet);
+  branch *root = branch_create("root", Folder);
+  branch *child = branch_create("file", File);
 
   cr_assert_not_null(root);
   cr_assert_not_null(child);
@@ -320,8 +320,8 @@ Test(tree, add_child_accepts_an_objet_child) {
 }
 
 Test(tree, add_child_rejects_a_child_of_an_objet_parent) {
-  branch *parent = branch_create("file", Objet);
-  branch *child = branch_create("child", Lieu);
+  branch *parent = branch_create("file", File);
+  branch *child = branch_create("child", Folder);
 
   cr_assert_not_null(parent);
   cr_assert_not_null(child);
@@ -336,9 +336,9 @@ Test(tree, add_child_rejects_a_child_of_an_objet_parent) {
 }
 
 Test(tree, add_child_rejects_a_duplicate_name) {
-  branch *root = branch_create("root", Lieu);
-  branch *first = branch_create("dup", Lieu);
-  branch *second = branch_create("dup", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *first = branch_create("dup", Folder);
+  branch *second = branch_create("dup", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(first);
@@ -359,9 +359,9 @@ Test(tree, add_child_rejects_a_duplicate_name) {
 }
 
 Test(tree, add_child_duplicate_check_is_case_sensitive) {
-  branch *root = branch_create("root", Lieu);
-  branch *lower = branch_create("name", Lieu);
-  branch *upper = branch_create("Name", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *lower = branch_create("name", Folder);
+  branch *upper = branch_create("Name", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(lower);
@@ -377,11 +377,11 @@ Test(tree, add_child_duplicate_check_is_case_sensitive) {
 }
 
 Test(tree, add_child_allows_the_same_name_under_different_parents) {
-  branch *root = branch_create("root", Lieu);
-  branch *left = branch_create("left", Lieu);
-  branch *right = branch_create("right", Lieu);
-  branch *left_child = branch_create("same", Lieu);
-  branch *right_child = branch_create("same", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *left = branch_create("left", Folder);
+  branch *right = branch_create("right", Folder);
+  branch *left_child = branch_create("same", Folder);
+  branch *right_child = branch_create("same", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(left);
@@ -401,8 +401,8 @@ Test(tree, add_child_allows_the_same_name_under_different_parents) {
 }
 
 Test(tree, add_child_allows_a_child_with_the_same_name_as_its_parent) {
-  branch *root = branch_create("root", Lieu);
-  branch *child = branch_create("root", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *child = branch_create("root", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(child);
@@ -415,30 +415,30 @@ Test(tree, add_child_allows_a_child_with_the_same_name_as_its_parent) {
 }
 
 Test(tree, add_child_rejected_elsewhere_can_be_attached_to_another_parent) {
-  branch *objet = branch_create("file", Objet);
-  branch *child = branch_create("kept", Lieu);
-  branch *root = branch_create("root", Lieu);
+  branch *file = branch_create("file", File);
+  branch *child = branch_create("kept", Folder);
+  branch *root = branch_create("root", Folder);
 
-  cr_assert_not_null(objet);
+  cr_assert_not_null(file);
   cr_assert_not_null(child);
   cr_assert_not_null(root);
 
-  cr_expect_eq(branch_add_child(objet, child), EXIT_FAILURE);
-  cr_expect_null(branch_find(objet, "kept"));
+  cr_expect_eq(branch_add_child(file, child), EXIT_FAILURE);
+  cr_expect_null(branch_find(file, "kept"));
 
   cr_expect_eq(branch_add_child(root, child), EXIT_SUCCESS);
   cr_expect_eq(branch_find(root, "kept"), child);
 
   branch_free(root);
-  branch_free(objet);
+  branch_free(file);
 }
 
 Test(tree, add_child_builds_a_deep_hierarchy) {
-  branch *root = branch_create("root", Lieu);
-  branch *n1 = branch_create("n1", Lieu);
-  branch *n2 = branch_create("n2", Lieu);
-  branch *n3 = branch_create("n3", Lieu);
-  branch *n4 = branch_create("n4", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *n1 = branch_create("n1", Folder);
+  branch *n2 = branch_create("n2", Folder);
+  branch *n3 = branch_create("n3", Folder);
+  branch *n4 = branch_create("n4", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(n1);
@@ -457,9 +457,9 @@ Test(tree, add_child_builds_a_deep_hierarchy) {
 }
 
 Test(tree, add_child_sets_parent_on_every_child) {
-  branch *root = branch_create("root", Lieu);
-  branch *first = branch_create("first", Lieu);
-  branch *second = branch_create("second", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *first = branch_create("first", Folder);
+  branch *second = branch_create("second", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(first);
@@ -475,10 +475,10 @@ Test(tree, add_child_sets_parent_on_every_child) {
 }
 
 Test(tree, add_child_keeps_insertion_order) {
-  branch *root = branch_create("root", Lieu);
-  branch *one = branch_create("one", Lieu);
-  branch *two = branch_create("two", Lieu);
-  branch *three = branch_create("three", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *one = branch_create("one", Folder);
+  branch *two = branch_create("two", Folder);
+  branch *three = branch_create("three", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(one);
@@ -498,10 +498,10 @@ Test(tree, add_child_keeps_insertion_order) {
 }
 
 Test(tree, add_child_rejects_a_duplicate_of_the_last_sibling) {
-  branch *root = branch_create("root", Lieu);
-  branch *first = branch_create("first", Lieu);
-  branch *last = branch_create("last", Lieu);
-  branch *duplicate = branch_create("last", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *first = branch_create("first", Folder);
+  branch *last = branch_create("last", Folder);
+  branch *duplicate = branch_create("last", Folder);
   branch **link;
   int result;
 
@@ -537,7 +537,7 @@ Test(tree, add_child_rejects_a_duplicate_of_the_last_sibling) {
 }
 
 Test(tree, add_child_rejects_a_null_parent) {
-  branch *child = branch_create("child", Lieu);
+  branch *child = branch_create("child", Folder);
 
   cr_assert_not_null(child);
 
@@ -547,7 +547,7 @@ Test(tree, add_child_rejects_a_null_parent) {
 }
 
 Test(tree, add_child_rejects_a_null_child) {
-  branch *root = branch_create("root", Lieu);
+  branch *root = branch_create("root", Folder);
 
   cr_assert_not_null(root);
 
@@ -558,7 +558,7 @@ Test(tree, add_child_rejects_a_null_child) {
 }
 
 Test(tree, add_child_rejects_a_branch_as_its_own_child) {
-  branch *root = branch_create("root", Lieu);
+  branch *root = branch_create("root", Folder);
   int result;
 
   cr_assert_not_null(root);
@@ -576,8 +576,8 @@ Test(tree, add_child_rejects_a_branch_as_its_own_child) {
 }
 
 Test(tree, add_child_rejects_an_ancestor_as_a_child) {
-  branch *root = branch_create("root", Lieu);
-  branch *child = branch_create("child", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *child = branch_create("child", Folder);
   int result;
 
   cr_assert_not_null(root);
@@ -600,9 +600,9 @@ Test(tree, add_child_rejects_an_ancestor_as_a_child) {
 }
 
 Test(tree, add_child_rejects_a_child_already_attached) {
-  branch *old_parent = branch_create("old", Lieu);
-  branch *new_parent = branch_create("new", Lieu);
-  branch *child = branch_create("child", Lieu);
+  branch *old_parent = branch_create("old", Folder);
+  branch *new_parent = branch_create("new", Folder);
+  branch *child = branch_create("child", Folder);
   branch **link;
   int result;
 
@@ -632,8 +632,8 @@ Test(tree, add_child_rejects_a_child_already_attached) {
 }
 
 Test(tree, add_child_rejects_an_objet_child_of_an_objet_parent) {
-  branch *parent = branch_create("file", Objet);
-  branch *child = branch_create("nested", Objet);
+  branch *parent = branch_create("file", File);
+  branch *child = branch_create("nested", File);
 
   cr_assert_not_null(parent);
   cr_assert_not_null(child);
@@ -653,7 +653,7 @@ Test(tree, free_null_is_a_noop) {
 }
 
 Test(tree, free_a_leaf) {
-  branch *b = branch_create("leaf", Objet);
+  branch *b = branch_create("leaf", File);
 
   cr_assert_not_null(b);
 
@@ -661,10 +661,10 @@ Test(tree, free_a_leaf) {
 }
 
 Test(tree, free_a_parent_with_several_children) {
-  branch *root = branch_create("root", Lieu);
-  branch *one = branch_create("one", Lieu);
-  branch *two = branch_create("two", Lieu);
-  branch *three = branch_create("three", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *one = branch_create("one", Folder);
+  branch *two = branch_create("two", Folder);
+  branch *three = branch_create("three", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(one);
@@ -679,10 +679,10 @@ Test(tree, free_a_parent_with_several_children) {
 }
 
 Test(tree, free_a_nested_tree) {
-  branch *root = branch_create("root", Lieu);
-  branch *n1 = branch_create("n1", Lieu);
-  branch *n2 = branch_create("n2", Lieu);
-  branch *n3 = branch_create("n3", Lieu);
+  branch *root = branch_create("root", Folder);
+  branch *n1 = branch_create("n1", Folder);
+  branch *n2 = branch_create("n2", Folder);
+  branch *n3 = branch_create("n3", Folder);
 
   cr_assert_not_null(root);
   cr_assert_not_null(n1);

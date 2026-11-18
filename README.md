@@ -46,3 +46,8 @@ make re
 # Voir toutes les commandes
 make help
 ```
+
+## Others
+
+*Codes couleurs terminal*
+  - Bleu gras : "\033[1;34m<texte>\033[0m\n"

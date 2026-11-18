@@ -4,4 +4,5 @@ compile_flags.txt
 # Contenu post-build
 build/
 minishell
+minishell.exe
 

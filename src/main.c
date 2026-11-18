@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
   const Command *c;
   Node *tokens, *token;
   Shell *shell;
-  branch *n1, *n2, *n3;
+  branch *n1, *n2, *n3, *n4, *n5;
 
   exit_code = 0;
   is_debug = argc >= 2 && !strcmp(argv[1], "--debug");
@@ -42,25 +42,40 @@ int main(int argc, char *argv[]) {
   if ((shell = (Shell *)malloc(sizeof(Shell))) == NULL) {
     return 1;
   }
-  if ((n1 = branch_create("n1", Lieu)) == NULL) {
+  if ((n1 = branch_create("/", Folder)) == NULL) {
     return 1;
   }
-  if ((n2 = branch_create("n2", Lieu)) == NULL) {
+  if ((n2 = branch_create("n2", Folder)) == NULL) {
     return 1;
   }
-  if ((n3 = branch_create("n3", Objet)) == NULL) {
+  if ((n3 = branch_create("n3", File)) == NULL) {
+    return 1;
+  }
+  if ((n4 = branch_create("n4", File)) == NULL) {
+    return 1;
+  }
+  if ((n5 = branch_create("n5", Folder)) == NULL) {
     return 1;
   }
   branch_add_child(n1, n2);
   branch_add_child(n2, n3);
+  branch_add_child(n2, n4);
+  branch_add_child(n2, n5);
   shell->root = n1;
-  shell->cwd = n2;
+  shell->cwd = n1;
   shell->debug_mode = is_debug;
 
   while (1) {
     printf("minish $");
-    tokens = lexer();
+    tokens = lexer(NULL, NULL);
     command = tokens->data;
+
+    /*     if (user_arg && user_arg[0]) {
+          printf("arg : [%s]\n", (char *)user_arg);
+        }
+        else {
+          printf("no argument\n");
+        } */
 
     if (quit_shell(tokens, &exit_code)) {
       lexer_free(&tokens);
@@ -68,7 +83,28 @@ int main(int argc, char *argv[]) {
     }
 
     c = command_find(command);
-    return_code = c ? c->f(shell, 0, NULL) : 127;
+
+    int arg_count = 0;
+    for (Node *n = tokens->next; n != NULL; n = n->next)
+      arg_count++;
+
+    char **args = NULL;
+    if (arg_count > 0) {
+      args = malloc((size_t)(arg_count + 1) * sizeof(*args));
+      if (args == NULL) {
+        lexer_free(&tokens);
+        continue;
+      }
+
+      int k = 0;
+      for (Node *n = tokens->next; n != NULL; n = n->next)
+        args[k++] = n->data;
+      args[arg_count] = NULL;
+    }
+
+    /*     printf("%d\n", arg_number);
+     */
+    return_code = c ? c->f(shell, arg_count, args) : 127;
 
     if (return_code == 127) {
       printf("command not found: %s\n\n", command);
@@ -87,6 +123,7 @@ int main(int argc, char *argv[]) {
       printf("\n>> return code: %d\n\n", return_code);
     }
 
+    free(args);
     lexer_free(&tokens);
   }
 
