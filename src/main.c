@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   int i, exit_code, return_code, is_debug;
   char *command;
   const Command *c;
-  Node *tokens, *token;
+  Node *tokens, *token, *n;
   Shell *shell;
   branch *n1, *n2, *n3, *n4, *n5;
 
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
     c = command_find(command);
 
     int arg_count = 0;
-    for (Node *n = tokens->next; n != NULL; n = n->next)
+    for (n = tokens->next; n != NULL; n = n->next)
       arg_count++;
 
     char **args = NULL;
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
       }
 
       int k = 0;
-      for (Node *n = tokens->next; n != NULL; n = n->next)
+      for (n = tokens->next; n != NULL; n = n->next)
         args[k++] = n->data;
       args[arg_count] = NULL;
     }

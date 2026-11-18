@@ -14,7 +14,7 @@ BIN_DIR = ${BUILD_DIR}/bin
 VG_LOG_DIR = ${BUILD_DIR}/valgrind
 
 CPPFLAGS = -I${SRC_DIR}
-CFLAGS = -Wall
+CFLAGS = -Wall -ansi
 
 # Fedora ne cherche pas criterion.pc dans /usr/local/lib/pkgconfig
 PKG_CONFIG_PATH := /usr/local/lib/pkgconfig:$(PKG_CONFIG_PATH)

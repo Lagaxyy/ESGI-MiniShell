@@ -59,8 +59,8 @@ int branch_add_child(branch *parent, branch *child) {
     return EXIT_FAILURE;
   }
 
-  if (branch_find_child(parent, child->nom)) // évite ajout dossier ou fichier
-                                             // de même nom directement ici
+  /* NOTE: évite ajout dossier ou fichier de même nom directement ici */
+  if (branch_find_child(parent, child->nom))
     return EXIT_FAILURE;
 
   if (parent->first_child == NULL) {
@@ -78,12 +78,15 @@ int branch_add_child(branch *parent, branch *child) {
 }
 
 void branch_print(branch *b, int depth) {
-  for (int i = 0; i < depth; i++) {
+  int i;
+  branch *n;
+
+  for (i = 0; i < depth; i++) {
     printf("  ");
   }
   printf("%s%s\n", b->nom, (b->type == Folder) ? "/" : "");
 
-  for (branch *n = b->first_child; n != NULL; n = n->next_sibling) {
+  for (n = b->first_child; n != NULL; n = n->next_sibling) {
     branch_print(n, depth + 1);
   }
 }

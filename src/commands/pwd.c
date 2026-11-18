@@ -3,7 +3,7 @@
 #include "commands.h"
 
 void recursive_print_pwd(branch *b) {
-  if (!b) {
+  if (!b || !b->parent) {
     return;
   }
 
@@ -15,7 +15,10 @@ int minishell_pwd(Shell *shell, int argc, char **argv) {
   if (shell->debug_mode)
     printf("[TRACE] Début fonction minishell_pwd\n");
 
-  recursive_print_pwd(shell->cwd);
+  if (shell->root == shell->cwd)
+    putchar('/');
+  else
+    recursive_print_pwd(shell->cwd);
 
   if (shell->debug_mode)
     printf("\n[TRACE] Fin fonction minishell_pwd");
