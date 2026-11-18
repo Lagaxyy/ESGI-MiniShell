@@ -14,6 +14,7 @@ struct branch {
 
 branch *branch_create(char *nom, branch_type type);
 branch *branch_find(branch *b, char *nom);
+branch *branch_find_child(branch *parent, char *nom);
 int branch_add_child(branch *parent, branch *child);
 void branch_print(branch *b, int depth);
 void branch_free(branch *p);
