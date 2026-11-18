@@ -9,6 +9,7 @@ static const Command commands[] = {
      "pwd", NULL},
     {"help", "Montre la liste des commandes", command_help, "help", NULL},
     {"ls", "Affiche le contenu d'un répertoire", minishell_ls, "ls", "-l : Informations plus précises"},
+    {"touch", "Créer un fichier", minishell_touch, "touch <nom_du_fichier>", NULL},
     {NULL, NULL, NULL, NULL}
 };
 
