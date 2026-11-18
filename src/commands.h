@@ -25,9 +25,9 @@ int command_help(Shell *shell, int argc, char **argv);
 
 /* Prototypes des commandes */
 int minishell_pwd(Shell *shell, int argc, char **argv);
-
 int minishell_ls(Shell *shell, int argc, char **argv);
-
 int minishell_cd(Shell *shell, int argc, char **argv);
+int minishell_touch(Shell *shell, int argc, char **argv);
+
 
 #endif /* COMMANDS_H */
