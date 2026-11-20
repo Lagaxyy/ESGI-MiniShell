@@ -39,12 +39,15 @@ Utilsation :
 
 Votre mission : Trouver la salle 02 à Erard et vous y rendre
 
-Vos outils : tree + cd
+Vos outils : ls + cd
 
 Utilsation : 
 
-tree
-    => tree
+ls
+    => ls 
+    => ls <arguments> <votre/chemin> 
+    Arguments :
+        => -l : Voir plus de détails
 
 cd
     => cd <arguments> 
@@ -61,9 +64,10 @@ cd
 
 Votre mission : Trouver l'identifiant de la copie de dans la salle 02 d'Erard [Nom/Prenom à définir]
 
-Votre outil : ls
+Votre outil : ls -l
 
 Utilsation : 
+
 ls
     => ls 
     => ls <arguments> <votre/chemin> 
