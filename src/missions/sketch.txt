@@ -22,7 +22,7 @@ Mission 8 - Toutes les commandes
 #                #
 ##################
 
-Votre mission : Trouver votre emplacement par rapport à l'entrée de l'ESGI
+Votre mission : A définir
 
 Votre outil : pwd
 
@@ -37,7 +37,7 @@ Utilsation :
 #                #
 ##################
 
-Votre mission : Trouver la salle 02 à Erard et vous y rendre
+Votre mission : A définir
 
 Vos outils : ls + cd
 
@@ -45,14 +45,9 @@ Utilsation :
 
 ls
     => ls 
-    => ls <arguments> <votre/chemin> 
-    Arguments :
-        => -l : Voir plus de détails
 
 cd
-    => cd <arguments> 
-    Arguments :
-        => .. : Retourner d'un repertoire en arrière
+    => cd <nom_du_dossier>
 
 ------------------
 
@@ -62,7 +57,7 @@ cd
 #                #
 ##################
 
-Votre mission : Trouver l'identifiant de la copie de dans la salle 02 d'Erard [Nom/Prenom à définir]
+Votre mission :  A définir
 
 Votre outil : ls -l
 
@@ -70,6 +65,11 @@ Utilsation :
 
 ls
     => ls 
-    => ls <arguments> <votre/chemin> 
+    => ls <arguments>
+    => ls <arguments> <votre/chemin>
     Arguments :
         => -l : Voir plus de détails
+
+cd
+    => cd <nom_du_dossier>
+    => cd </dossier/dossier2/dossier3>
