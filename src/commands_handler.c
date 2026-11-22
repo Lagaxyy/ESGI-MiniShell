@@ -11,6 +11,7 @@ static const Command commands[] = {
     {"ls", "Affiche le contenu d'un répertoire", minishell_ls, "ls", "-l : Informations plus précises"},
     {"cd", "Change le repertoire courant", minishell_cd, "cd [chemin]", NULL},
     {"touch", "Créer un fichier", minishell_touch, "touch <nom_du_fichier>", NULL},
+    {"rm", "Supprime un fichier ou un répertoire", minishell_rm, "rm <nom_du_fichier/dossier>", NULL},
     {NULL, NULL, NULL, NULL}
 };
 
