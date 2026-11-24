@@ -56,12 +56,12 @@ branch *branch_find(branch *b, char *nom) {
 
 int branch_add_child(branch *parent, branch *child) {
   if (parent->type != Folder) {
-    return EXIT_FAILURE;
+    return 0;
   }
 
   /* NOTE: évite ajout dossier ou fichier de même nom directement ici */
   if (branch_find_child(parent, child->nom))
-    return EXIT_FAILURE;
+    return 0;
 
   if (parent->first_child == NULL) {
     parent->first_child = child;
@@ -74,7 +74,7 @@ int branch_add_child(branch *parent, branch *child) {
     child->parent = parent;
     dernier->next_sibling = child;
   }
-  return EXIT_SUCCESS;
+  return 1;
 }
 
 void branch_print(branch *b, int depth) {
@@ -103,4 +103,33 @@ void branch_free(branch *p) {
     c = suivant;
   }
   free(p);
+}
+
+/**
+ * Vérifie si les branches en argument sont identiques (même nom et même chemin
+ * vers la racine)
+ *
+ * @param b1 la première branche
+ * @param b2 la seconde branche
+ *
+ * @return 1 si les branches sont identiques, 0 sinon
+ */
+int branch_compare(branch *b1, branch *b2) {
+  branch *n1 = b1, *n2 = b2;
+
+  if (!b1 && !b2)
+    return 1;
+  if (!b1 || !b2)
+    return 0;
+
+  do {
+    if (strcmp(n1->nom, n2->nom) != 0) {
+      return 0;
+    }
+
+    n1 = n1->parent;
+    n2 = n2->parent;
+  } while (n1 && n2);
+
+  return !n1 && !n2;
 }
