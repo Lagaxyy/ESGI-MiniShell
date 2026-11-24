@@ -19,5 +19,7 @@ int branch_add_child(branch *parent, branch *child);
 void branch_print(branch *b, int depth);
 void branch_free(branch *p);
 int branch_compare(branch *b1, branch *b2);
+int branch_save(branch *b, const char *path);
+branch *branch_load(const char *path);
 
 #endif /* TREE_H */
