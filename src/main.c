@@ -42,7 +42,7 @@ int minishell_save_recursive(branch *b, FILE *f, int depth) {
   }
 
   for (i = 0; i < depth; i++) {
-    fputc('\t', f);
+    fprintf(f, "  ");
   }
 
   if (b->type == Folder) {
@@ -63,7 +63,7 @@ int minishell_save_recursive(branch *b, FILE *f, int depth) {
     rcode = rcode && minishell_save_recursive(br, f, depth + 1);
   }
   for (i = 0; i < depth; i++) {
-    fputc('\t', f);
+    fprintf(f, "  ");
   }
   fprintf(f, "]\n");
 
@@ -140,7 +140,7 @@ branch *minishell_load_recursive(Node **tokens) {
     cur = cur->next;
 
     while (cur && strcmp(cur->data, "]") != 0) {
-      branch *b, *new_child;
+      branch *new_child;
 
       if ((new_child = minishell_load_recursive(&cur)) == NULL) {
         fprintf(stderr,
@@ -149,12 +149,12 @@ branch *minishell_load_recursive(Node **tokens) {
         return NULL;
       }
 
-      if (!new_b->first_child) {
-        new_b->first_child = new_child;
-      } else {
-        for (b = new_b->first_child; b->next_sibling; b = b->next_sibling)
-          ;
-        b->next_sibling = new_child;
+      if (!branch_add_child(new_b, new_child)) {
+        fprintf(stderr,
+                "minishell_load_recursive: erreur ajout noeud enfant\n");
+        branch_free(new_child);
+        branch_free(new_b);
+        return NULL;
       }
     }
 
@@ -282,6 +282,11 @@ int main(int argc, char *argv[]) {
     branch_print(shell->root, 0);
     printf("\n");
   }
+  branch *a = minishell_load("tests/test2.minish");
+  branch *test1 = branch_find(shell->root, "n6");
+  branch *test2 = branch_find(a, "n6");
+  printf("check: %d\n", branch_compare(test1, test2));
+  branch_free(a);
 
   /* NOTE: Simulation du shell */
   while (1) {
@@ -330,6 +335,12 @@ int main(int argc, char *argv[]) {
 
     free(args);
     lexer_free(&tokens);
+  }
+
+  if (!minishell_save(shell->root, starter)) {
+    fprintf(stderr,
+            "minishell: erreur écriture arborescence dans le fichier \"%s\"\n",
+            starter);
   }
 
   branch_free(shell->root);
