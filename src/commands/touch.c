@@ -89,7 +89,7 @@ int touch_cwd_path(char *argv, branch *b) {
     }
   }
 
-  free(tokens);
+  lexer_free(&tokens);
   return 0;
 }
 
