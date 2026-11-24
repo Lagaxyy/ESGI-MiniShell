@@ -3,6 +3,8 @@
 #include <string.h>
 
 #include "commands.h"
+#include "lexer/lexer.h"
+#include "tree/tree.h"
 
 int minishell_cd(Shell *shell, int argc, char **argv) {
   if (shell->debug_mode)

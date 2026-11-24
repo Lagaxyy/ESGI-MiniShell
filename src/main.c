@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "commands.h"
+#include "lexer/lexer.h"
 #include "tree/tree.h"
 
 /**
@@ -260,7 +261,7 @@ int main(int argc, char *argv[]) {
   Node *tokens, *n;
   Shell *shell;
   branch *root;
-  char *starter = "tests/test.minish";
+  char *starter = "tests/test.tree";
 
   exit_code = 0;
   is_debug = argc >= 2 && !strcmp(argv[1], "--debug");
@@ -282,7 +283,7 @@ int main(int argc, char *argv[]) {
     branch_print(shell->root, 0);
     printf("\n");
   }
-  branch *a = minishell_load("tests/test2.minish");
+  branch *a = minishell_load("tests/test2.tree");
   branch *test1 = branch_find(shell->root, "n6");
   branch *test2 = branch_find(a, "n6");
   printf("check: %d\n", branch_compare(test1, test2));

@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "commands.h"
+#include "tree/tree.h"
 
 void recursive_print_pwd(branch *b) {
   if (!b || !b->parent) {

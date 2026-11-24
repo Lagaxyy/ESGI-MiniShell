@@ -3,6 +3,8 @@
 #include <string.h>
 
 #include "commands.h"
+#include "lexer/lexer.h"
+#include "tree/tree.h"
 
 void print_children_ls(branch *b) {
   branch *fs = b->first_child;

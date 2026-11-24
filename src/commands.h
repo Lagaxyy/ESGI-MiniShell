@@ -1,8 +1,7 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-#include "lexer/lexer.h"
-#include "tree/tree.h"
+typedef struct branch branch;
 
 typedef struct Shell {
   branch *root;
