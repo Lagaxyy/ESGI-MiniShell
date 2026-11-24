@@ -62,15 +62,14 @@ int main(int argc, char *argv[]) {
   Node *tokens, *n;
   Shell *shell;
   branch *root;
-  char *starter = "tests/test.tree";
 
   exit_code = 0;
   is_debug = argc >= 2 && !strcmp(argv[1], "--debug");
 
   /* TEST: Construction d'un arbre */
-  if ((root = branch_load(starter)) == NULL) {
+  if ((root = branch_load(FILE_BASE_TREE)) == NULL) {
     fprintf(stderr, "minishell: erreur chargement arborescence depuis \"%s\"\n",
-            starter);
+            FILE_BASE_TREE);
     return 1;
   }
   if ((shell = (Shell *)malloc(sizeof(Shell))) == NULL) {
@@ -80,7 +79,7 @@ int main(int argc, char *argv[]) {
   shell->root = root;
   shell->cwd = root;
   if (is_debug) {
-    printf("Arborescence chargée depuis \"%s\":\n", starter);
+    printf("Arborescence chargée depuis \"%s\":\n", FILE_BASE_TREE);
     branch_print(shell->root, 0);
     printf("\n");
   }
@@ -132,12 +131,6 @@ int main(int argc, char *argv[]) {
 
     free(args);
     lexer_free(&tokens);
-  }
-
-  if (!branch_save(shell->root, starter)) {
-    fprintf(stderr,
-            "minishell: erreur écriture arborescence dans le fichier \"%s\"\n",
-            starter);
   }
 
   branch_free(shell->root);

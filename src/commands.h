@@ -1,6 +1,8 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+#define FILE_BASE_TREE "tests/shell.tree"
+
 typedef struct branch branch;
 
 typedef struct Shell {
@@ -27,5 +29,7 @@ int minishell_pwd(Shell *shell, int argc, char **argv);
 int minishell_ls(Shell *shell, int argc, char **argv);
 int minishell_cd(Shell *shell, int argc, char **argv);
 int minishell_touch(Shell *shell, int argc, char **argv);
+int minishell_submit(Shell *shell, int argc, char **argv);
+int minishell_mission(Shell *shell, int argc, char **argv);
 
 #endif /* COMMANDS_H */

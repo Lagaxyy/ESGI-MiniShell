@@ -8,11 +8,19 @@ static const Command commands[] = {
     {"pwd", "Affiche le chemin absolu du répertoire courant", minishell_pwd,
      "pwd", NULL},
     {"help", "Montre la liste des commandes", command_help, "help", NULL},
-    {"ls", "Affiche le contenu d'un répertoire", minishell_ls, "ls", "-l : Informations plus précises"},
+    {"ls", "Affiche le contenu d'un répertoire", minishell_ls, "ls",
+     "-l : Informations plus précises"},
     {"cd", "Change le repertoire courant", minishell_cd, "cd [chemin]", NULL},
-    {"touch", "Créer un fichier", minishell_touch, "touch <nom_du_fichier>", NULL},
-    {NULL, NULL, NULL, NULL}
-};
+    {"touch", "Créer un fichier", minishell_touch, "touch <nom_du_fichier>",
+     NULL},
+    {"submit",
+     "Commande spéciale: soumet une réponse et l'arborescence pour validation "
+     "de la mission",
+     minishell_submit, "submit [réponse]", NULL},
+    {"mission",
+     "Commande spéciale: lancer/quitter une mission, reset l'arborescence",
+     minishell_mission, "mission [mode]", "start, quit"},
+    {NULL, NULL, NULL, NULL}};
 
 const Command *command_find(const char *name) {
   size_t i = 0;
@@ -37,10 +45,9 @@ int command_help(Shell *shell, int argc, char **argv) {
   while (command.name != NULL) {
     printf("\t%s: %s\n", command.name, command.description);
     printf("\t=> %s\n", command.usage);
-    if(command.args != NULL){
-      printf("\t => %s\n\n", command.args);
-    }
-    else{
+    if (command.args != NULL) {
+      printf("\t  => %s\n\n", command.args);
+    } else {
       printf("\n");
     }
 
