@@ -1,0 +1,7 @@
+FOLDER "root" [
+  FOLDER "test" [
+    FOLDER "starter" [
+      FILE "i use arch btw"
+    ]
+  ]
+]

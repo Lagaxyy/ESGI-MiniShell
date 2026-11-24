@@ -1,4 +1,4 @@
-FOLDER "n1" [
+FOLDER "root" [
   FOLDER "n2" [
     FOLDER "n3" [
       FILE "n6"

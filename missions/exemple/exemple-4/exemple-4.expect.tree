@@ -1,0 +1,11 @@
+FOLDER "root" [
+  FOLDER "ici" [
+    FOLDER "continue" [
+      FOLDER "encore" [
+        FOLDER "enfin" [
+          FILE "drapeau"
+        ]
+      ]
+    ]
+  ]
+]

@@ -1,0 +1,12 @@
+FOLDER "root" [
+  FOLDER "ici" [
+    FOLDER "continue" [
+      FOLDER "encore" [
+        FOLDER "enfin"
+      ]
+    ]
+  ]
+  FOLDER "rien à voir ici frérot" [
+    FILE "mais vraiment pas en fait"
+  ]
+]

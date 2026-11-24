@@ -1,0 +1,1 @@
+Rentre dans le dernier sous-dossier dans "ici/", crée un fichier "drapeau" et renvoie la sortie de la commande pwd.

@@ -1,0 +1,4 @@
+start none
+expect /ici/continue/encore/enfin
+tree exemple-4.expect.tree
+next fin

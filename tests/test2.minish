@@ -1,9 +1,0 @@
-FOLDER "n1" [
-  FOLDER "n2" [
-    FOLDER "n3" [
-      FILE "n6"
-    ]
-  ]
-  FILE "n12"
-  FILE "n13"
-]
